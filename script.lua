@@ -1,154 +1,113 @@
 --[[
-    ================================================================================================
-    SCRIPT UNTUK: Grow a Garden
-    DIBUAT OLEH: Arexans
-    TANGGAL: 27 Juli 2025
-    VERSI: 2.0 (Diperbarui dengan Rayfield GUI Library yang stabil)
-    ================================================================================================
+=================================================================================
+  Skrip Cheat "Grow a Garden" dengan Jendela Mengambang (GUI)
+=================================================================================
+
+  Fitur:
+  - Jendela (GUI) yang bisa digeser-geser.
+  - Tombol On/Off untuk mengaktifkan/menonaktifkan fitur.
+  - Auto Water: Menyiram tanaman secara otomatis saat fitur diaktifkan.
+
+  Cara Kerja:
+  1.  **Memuat Library GUI**: Skrip akan mengunduh dan menjalankan library "Rayfield" untuk membuat antarmuka.
+  2.  **Membuat Jendela**: Sebuah jendela baru akan dibuat di layar Anda.
+  3.  **Membuat Tombol**: Di dalam jendela, akan ada tombol "Toggle" (saklar) untuk fitur "Auto Water".
+  4.  **Menjalankan Logika**: Skrip akan terus berjalan di latar belakang. Namun, logika untuk menyiram tanaman HANYA akan dieksekusi jika tombol dalam posisi "On".
+
+  PENTING: Seperti sebelumnya, nama-nama objek game ("WateringCan", "NeedsWater", dll.)
+  adalah tebakan dan mungkin perlu disesuaikan agar cocok dengan versi game saat ini.
 ]]
 
--- Memuat library GUI Rayfield. Ini adalah pengganti OrionLib yang sudah tidak berfungsi.
+--================================[ 1. Memuat Library GUI ]=================================
+-- Baris ini mengunduh dan memuat library Rayfield UI.
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 
--- ================================================================================================
--- !! PENTING JIKA SKRIP TIDAK BEKERJA !!
--- Nama-nama di bawah ini adalah TEBAKAN. Jika game di-update, ganti nama di dalam tanda kutip ("").
--- Gunakan "Remote Spy" dari executor Anda untuk menemukan nama yang benar.
--- ================================================================================================
-local GamePaths = {
-    RemotesFolder = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes"),
-    PlotsFolder = game:GetService("Workspace"):FindFirstChild("Plots"),
-    SellArea = game:GetService("Workspace"):FindFirstChild("SellArea")
-}
-
--- ================================================================================================
--- PENGATURAN TEMA (THEME) & JENDELA UTAMA
--- ================================================================================================
+--================================[ 2. Membuat Jendela GUI ]=================================
+-- Membuat jendela utama yang akan muncul di layar.
 local Window = Rayfield:CreateWindow({
-   Name = "Arexans",
-   LoadingTitle = "Arexans Script Interface",
-   LoadingSubtitle = "by Arexans",
-   ConfigurationSaving = {
-      Enabled = true,
-      FolderName = "ArexansConfig", 
-      FileName = "GrowAGarden"
-   },
-   -- Mengatur tema biru glowy
-   AccentColor = Color3.fromRGB(0, 150, 255),
-   KeySystem = false -- Tidak perlu key system
+    Name = "Grow a Garden - Partner Coding",
+    LoadingTitle = "Memuat Antarmuka...",
+    LoadingSubtitle = "oleh Partner Coding",
+    ConfigurationSaving = {
+        Enabled = true, -- Mengizinkan GUI untuk menyimpan posisi & status tombol
+        FolderName = nil, -- Menyimpan di folder default Rayfield
+        FileName = "GardenHubConfig"
+    }
 })
 
+-- Membuat tab di dalam jendela untuk menaruh tombol-tombol
+local MainTab = Window:CreateTab("Utama", nil)
 
--- ================================================================================================
--- TAB FARMING OTOMATIS
--- ================================================================================================
-local FarmTab = Window:CreateTab("Farming", "rbxassetid://6034523644")
+--================================[ 3. Logika & Tombol Kontrol ]=================================
 
-local autoHarvestEnabled, autoWaterEnabled, autoSellEnabled = false, false, false
+-- Variabel ini akan melacak status On/Off dari tombol.
+-- Kita mulai dengan 'false' (mati).
+local isAutoWaterEnabled = false 
 
-FarmTab:CreateToggle({
-   Name = "Auto Harvest",
-   Callback = function(state)
-        autoHarvestEnabled = state
-        spawn(function()
-            while autoHarvestEnabled and task.wait(1) do
-                local localPlayer = game.Players.LocalPlayer
-                if GamePaths.PlotsFolder and localPlayer and localPlayer.Character and GamePaths.RemotesFolder then
-                    for _, plot in ipairs(GamePaths.PlotsFolder:GetChildren()) do
-                        if plot:FindFirstChild("Owner") and plot.Owner.Value == localPlayer.Name then
-                            for _, item in ipairs(plot:GetChildren()) do
-                                local harvestPart = item:FindFirstChild("TouchPart")
-                                if harvestPart and harvestPart:FindFirstChild("Harvest") then
-                                    localPlayer.Character.HumanoidRootPart.CFrame = harvestPart.CFrame
-                                    GamePaths.RemotesFolder.Harvest:FireServer(item)
-                                    task.wait(0.2)
-                                end
+-- Membuat tombol saklar (toggle) di dalam tab "Utama"
+MainTab:CreateToggle({
+    Name = "Auto Water Tanaman",
+    CurrentValue = isAutoWaterEnabled,
+    Flag = "AutoWaterToggle", -- ID unik untuk menyimpan status tombol ini
+    Callback = function(Value)
+        -- 'Callback' ini adalah fungsi yang akan dijalankan setiap kali tombol ditekan.
+        -- 'Value' akan menjadi 'true' jika On, dan 'false' jika Off.
+        isAutoWaterEnabled = Value
+        if Value then
+            Rayfield:Notify("Auto Water Diaktifkan!", "Skrip akan mulai mencari tanaman.", 5)
+        else
+            Rayfield:Notify("Auto Water Dinonaktifkan.", "Skrip berhenti menyiram.", 5)
+        end
+    end,
+})
+
+--================================[ 4. Logika Inti Cheat (Dijalankan di Latar Belakang) ]=================================
+
+-- Mendapatkan layanan, pemain, dan karakter (sama seperti skrip sebelumnya)
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = Players.LocalPlayer
+
+-- Kita buat perulangan tanpa henti yang berjalan di latar belakang
+-- Ini akan terus memeriksa apakah fitur perlu dijalankan atau tidak.
+while wait(3) do -- Cek setiap 3 detik untuk mengurangi lag
+    -- Periksa apakah tombol dalam keadaan ON
+    if isAutoWaterEnabled then
+        -- 'pcall' digunakan untuk mencegah skrip berhenti total jika terjadi error
+        pcall(function()
+            local character = player.Character
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+            local backpack = player:FindFirstChildOfClass("Backpack")
+
+            if not (character and humanoid and backpack) then return end
+
+            -- 1. Cari alat penyiram
+            local wateringCan = backpack:FindFirstChild("WateringCan") or character:FindFirstChild("WateringCan")
+
+            if wateringCan then
+                -- 2. Cari semua plot tanaman
+                local plotsFolder = Workspace:FindFirstChild("Plots") or Workspace
+                for i, plot in ipairs(plotsFolder:GetChildren()) do
+                    -- 3. Periksa apakah plot valid dan butuh air
+                    if string.find(plot.Name, "Dirt") and plot:FindFirstChild("Plant") then
+                        local plant = plot.Plant
+                        local needsWater = plant:FindFirstChild("NeedsWater")
+
+                        if needsWater and needsWater.Value == true then
+                            -- 4. Jalankan aksi menyiram
+                            humanoid:EquipTool(wateringCan)
+                            local waterEvent = ReplicatedStorage:FindFirstChild("WaterEvent")
+                            
+                            if waterEvent then
+                                waterEvent:FireServer(plot)
+                                print("Menyiram tanaman: " .. plot.Name)
+                                wait(0.5) -- Jeda singkat
                             end
                         end
                     end
                 end
             end
         end)
-   end,
-})
-
-FarmTab:CreateToggle({
-   Name = "Auto Water",
-   Callback = function(state)
-        autoWaterEnabled = state
-        spawn(function()
-            while autoWaterEnabled and task.wait(2) do
-                local localPlayer = game.Players.LocalPlayer
-                if GamePaths.PlotsFolder and localPlayer and GamePaths.RemotesFolder then
-                    for _, plot in ipairs(GamePaths.PlotsFolder:GetChildren()) do
-                        if plot:FindFirstChild("Owner") and plot.Owner.Value == localPlayer.Name then
-                            for _, item in ipairs(plot:GetChildren()) do
-                                if item:FindFirstChild("Water") then
-                                    GamePaths.RemotesFolder.Water:FireServer(item)
-                                    task.wait(0.5)
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-   end,
-})
-
-FarmTab:CreateToggle({
-   Name = "Auto Sell",
-   Callback = function(state)
-        autoSellEnabled = state
-        spawn(function()
-            while autoSellEnabled and task.wait(5) do
-                if GamePaths.SellArea and GamePaths.RemotesFolder then
-                    GamePaths.RemotesFolder.SellAll:FireServer()
-                end
-            end
-        end)
-   end,
-})
-
--- ================================================================================================
--- TAB PLAYER
--- ================================================================================================
-local PlayerTab = Window:CreateTab("Player", "rbxassetid://5112192243")
-
-PlayerTab:CreateSlider({
-   Name = "WalkSpeed",
-   Range = {16, 150},
-   Increment = 1,
-   Suffix = "Speed",
-   Default = 16,
-   Callback = function(value)
-        local player = game.Players.LocalPlayer
-        if player.Character and player.Character:FindFirstChild("Humanoid") then
-            player.Character.Humanoid.WalkSpeed = value
-        end
-   end,
-})
-
-PlayerTab:CreateSlider({
-   Name = "JumpPower",
-   Range = {50, 200},
-   Increment = 5,
-   Suffix = "Power",
-   Default = 50,
-   Callback = function(value)
-        local player = game.Players.LocalPlayer
-        if player.Character and player.Character:FindFirstChild("Humanoid") then
-            player.Character.Humanoid.JumpPower = value
-        end
-   end,
-})
-
--- ================================================================================================
--- TAB KREDIT
--- ================================================================================================
-local CreditsTab = Window:CreateTab("Credits", "rbxassetid://4843400112")
-
-CreditsTab:CreateLabel("Script by Arexans")
-CreditsTab:CreateLabel("GUI: Rayfield Library")
-
--- Notifikasi tidak diperlukan karena Rayfield sudah memiliki layar loading sendiri
+    end
+end
