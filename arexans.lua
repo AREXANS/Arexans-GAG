@@ -1146,7 +1146,8 @@ end)
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
-local decalId = "rbxassetid://122755768466240"
+-- Ikon diubah ke ikon pengaturan
+local decalId = "rbxassetid://10734950309"
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "DraggableImageButtonGui"
@@ -1156,10 +1157,10 @@ screenGui.Parent = playerGui
 local imageButton = Instance.new("ImageButton")
 imageButton.Name = "DraggableButton"
 imageButton.Image = decalId
-imageButton.Size = UDim2.new(0, 65, 0, 65)
-imageButton.AnchorPoint = Vector2.new(0.5, 0.5)
-imageButton.Position = UDim2.new(0, 100, 1, -400)
-imageButton.BackgroundTransparency = 0
+imageButton.Size = UDim2.new(0, 50, 0, 50) -- Ukuran diubah menjadi 50x50
+imageButton.AnchorPoint = Vector2.new(1, 0) -- Anchor diubah ke kanan atas
+imageButton.Position = UDim2.new(1, -15, 0, 15) -- Posisi diubah ke kanan atas dengan padding 15px
+imageButton.BackgroundTransparency = 1 -- Latar belakang dibuat transparan
 imageButton.AutoButtonColor = false
 imageButton.Parent = screenGui
 
