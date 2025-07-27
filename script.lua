@@ -20,7 +20,7 @@
 
 --================================[ 1. Memuat Library GUI ]=================================
 -- Baris ini mengunduh dan memuat library Rayfield UI.
-local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/Johnny-scripter/Speed-Hub-GAG/refs/heads/main/Source'))()
 
 --================================[ 2. Membuat Jendela GUI ]=================================
 -- Membuat jendela utama yang akan muncul di layar.
