@@ -39,11 +39,12 @@ end)
 
 local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/AREXANS/Arexans-GAG/refs/heads/main/main.lua"))()
 
+-- Ukuran jendela diperkecil dari 600x350 menjadi 540x320
 local Window = Fluent:CreateWindow({
     Title = "AREXANS HUB |",
     SubTitle = "Made by Arexans | Version: ".. vful,
-    TabWidth = 180,
-    Size = UDim2.fromOffset(600, 350),
+    TabWidth = 160, -- Lebar tab juga disesuaikan
+    Size = UDim2.fromOffset(540, 320), -- Ukuran diubah di sini
     Acrylic = false,
     Theme = "Dark",
     Center = true,
@@ -113,11 +114,6 @@ InterfaceManager:BuildInterfaceSection(config)
 
 -- Local Variables --
 
-
---[[ old
-local byallseed = {"Carrot", "Strawberry", "Blueberry", "Orange Tulip", "Tomato", "Corn", "Daffodil", "Watermelon", "Pumpkin", "Apple", "Bamboo", "Coconut", "Cactus", "Dragon Fruit", "Mango", "Grape", "Mushroom", "Pepper", "Cacao", "Beanstalk", "Ember Lily", "Sugar Apple"}
-]]
-
 local byallseed = {
     "Carrot", "Strawberry", "Blueberry", "Tomato", "Cauliflower", "Watermelon", "Rafflesia", "Green Apple",
     "Avocado", "Banana", "Pineapple", "Kiwi", "Bell Pepper", "Prickly Pear", "Loquat",
@@ -126,26 +122,16 @@ local byallseed = {
 
 local bygear = {"Watering Can", "Trowel", "Recall Wrench", "Basic Sprinkler", "Advanced Sprinkler", "Godly Sprinkler", "Lightning Rod", "Magnifying Glass", "Tanning Mirror", "Master Sprinkler", "Cleaning Spray", "Favorite Tool", "Harvest Tool", "Friendship Pot"}
 
-
-
-
-
-
 local bsa = false
 local bsg = false
-
 local selectedSeeds = {}
 local selectedGears = {}
-
 local step = 0.001
 local x = Vector3.new(34.14344024658203, 0.13552513718605042, -112.62083435058594)
 local y = Vector3.new(31.82763671875, 0.13552513718605042, -112.6816635131836)
-
 local Pos = hrp.Position
 local pos = tostring(Pos)
-
 local walkSpeed = humanoid.WalkSpeed
-
 local PetsId = {}
 
 -- Local functions --
@@ -316,11 +302,6 @@ Shop:AddToggle("", {
         end)
     end
 })
-
-
-
-
-
 
 -- 
 
@@ -783,9 +764,6 @@ function prefsh()
         end
     end
     print("Pets updated:")
-    --[[for _, id in ipairs(PetsId) do
-        print(id)
-    end]]
     return PetsId
 end
 
@@ -1076,11 +1054,7 @@ task.spawn(function()
     end
 end)
 
-
-
 --
-
-
 
 local versgame = (game:GetService("Players").LocalPlayer.PlayerGui.Version_UI.Version.Text):gsub("^v", "")
 function svvererr(v)
@@ -1099,19 +1073,10 @@ vuln:AddParagraph({
         Title = "Current server version: ", Content = versgame
     })
 
-
-
-
-
 utility:AddParagraph({
 	Title = "If you've seen this, thank you for making it this far",
 	Content = "I will stop programming. Sincerely: Lucas"
 	})
-
-
-
-
-
 
 task.spawn(function()
     local lastMinute = -1
@@ -1146,21 +1111,21 @@ end)
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Ikon diubah ke ikon pengaturan
-local decalId = "rbxassetid://10734950309"
+local decalId = "rbxassetid://10734950309" -- Ikon Pengaturan
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "DraggableImageButtonGui"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = playerGui
+screenGui.DisplayOrder = 10 -- Ditambahkan agar tombol selalu di atas
 
 local imageButton = Instance.new("ImageButton")
 imageButton.Name = "DraggableButton"
 imageButton.Image = decalId
-imageButton.Size = UDim2.new(0, 50, 0, 50) -- Ukuran diubah menjadi 50x50
-imageButton.AnchorPoint = Vector2.new(1, 0) -- Anchor diubah ke kanan atas
-imageButton.Position = UDim2.new(1, -15, 0, 15) -- Posisi diubah ke kanan atas dengan padding 15px
-imageButton.BackgroundTransparency = 1 -- Latar belakang dibuat transparan
+imageButton.Size = UDim2.new(0, 50, 0, 50)
+imageButton.AnchorPoint = Vector2.new(1, 0)
+imageButton.Position = UDim2.new(1, -15, 0, 15)
+imageButton.BackgroundTransparency = 1
 imageButton.AutoButtonColor = false
 imageButton.Parent = screenGui
 
