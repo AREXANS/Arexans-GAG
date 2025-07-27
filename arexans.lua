@@ -106,7 +106,7 @@ local ui = Window:AddTab({
     Icon = "rbxassetid://133691553274983"
 })
 
-local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/AREXANS/Arexans-GAG/refs/heads/main/InterfaceManager.lua"))()
 InterfaceManager:SetLibrary(Fluent)
 InterfaceManager:SetFolder("GrowAGarden")
 InterfaceManager:BuildInterfaceSection(config)

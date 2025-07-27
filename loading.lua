@@ -1,6 +1,6 @@
 game:GetService("StarterGui"):SetCore("SendNotification", {Title="Script loading...", Text="Made by Arexans", Duration=5})
 
-local l = loadstring(game:HttpGet("https://raw.githubusercontent.com/discoart/FluentPlus/refs/heads/main/release.lua", true))()
+local l = loadstring(game:HttpGet("https://raw.githubusercontent.com/AREXANS/Arexans-GAG/refs/heads/main/realease.lua", true))()
 local Window = l:CreateWindow({
     Title = "",
     SubTitle = "",
