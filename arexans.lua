@@ -5,7 +5,7 @@ local script_version = {
     alpha = true,
 }
 if script_version.alpha == true then
-    script_version.alpha = "Alpha version"
+    script_version.alpha = "New version"
 else 
     script_version.alpha = "Release version"
 end
@@ -54,7 +54,7 @@ local Window = Fluent:CreateWindow({
 -- Local Tabs --
 
 local player = Window:AddTab({
-    Title = "main",
+    Title = "Main",
     Icon = "user"
 })
 local Shop = Window:AddTab({
@@ -68,7 +68,7 @@ local pet = Window:AddTab({
 })
 
 local plant = Window:AddTab({
-    Title = "Frame",
+    Title = "Farm",
     Icon = "rbxassetid://91815274279491"
 })
 
@@ -82,12 +82,12 @@ local event = Window:AddTab({
     Icon = "rbxassetid://88058653294248"
 })
 local Tp = Window:AddTab({
-    Title = "teleport",
+    Title = "Teleport",
     Icon = "user"
 })
 
 local vuln = Window:AddTab({
-    Title = "Vulnerabilidade",
+    Title = "Vulnerability",
     Icon = "rbxassetid://92158036430997"
 })
 
@@ -111,7 +111,7 @@ InterfaceManager:SetLibrary(Fluent)
 InterfaceManager:SetFolder("GrowAGarden")
 InterfaceManager:BuildInterfaceSection(config)
 
--- Local VariÃ¡veis --
+-- Local Variables --
 
 
 --[[ old
@@ -216,7 +216,7 @@ local section = Shop:AddSection("Seeds")
 
 Shop:AddToggle("", {
     Title = "Buy shop seed",
-    Description = "Buy select shop seed",
+    Description = "Buy selected shop seed",
     Default = false,
     Callback = function(Value)
         bsa = Value
@@ -224,8 +224,8 @@ Shop:AddToggle("", {
 })
 
 local dropdownSeed = Shop:AddDropdown("DropdownSeed", {
-    Title = "Selecione seeds para comprar\n",
-    Description = "Selecione select para comprar\n",
+    Title = "Select seeds to buy\n",
+    Description = "Select seeds to buy\n",
     Values = byallseed,
     Multi = true,
     Default = {},
@@ -252,8 +252,8 @@ Shop:AddToggle("", {
 })
 
 local dropdownGear = Shop:AddDropdown("DropdownGear", {
-    Title = "Selecione gears para comprar\n",
-    Description = "Selecione gears para comprar\n",
+    Title = "Select gears to buy\n",
+    Description = "Select gears to buy\n",
     Values = bygear,
     Multi = true,
     Default = {},
@@ -279,7 +279,7 @@ function gne(n)
 end
 local selected = {}
 local mdp = Shop:AddDropdown("MultiDropdown", {
-    Title = "Selecionar Eggs",
+    Title = "Select Eggs",
     Description = "",
     Values = {
         "Common Egg", "Common Summer Egg", "Rare Summer Egg",
@@ -298,7 +298,7 @@ end)
 _G.bpd = false
 
 Shop:AddToggle("", {
-    Title = "Comprar Automaticamente Eggs selecionados. \n",
+    Title = "Automatically buy selected eggs. \n",
     Description = "",
     Default = false,
     Callback = function(state)
@@ -327,8 +327,8 @@ Shop:AddToggle("", {
 plant:AddSection("Plant spam (Pos set)")
 
 plant:AddButton({
-        Title = "Set local X",
-        Description = "click para setar o inicio do auto plant\n",
+        Title = "Set location X",
+        Description = "Click to set the start of auto plant\n",
         Callback = function()
           x = Vector3.new(hrp.Position.X, 0.13552513718605042, hrp.Position.Z)
           print(x)
@@ -337,8 +337,8 @@ plant:AddButton({
     })
 
 plant:AddButton({
-        Title = "Set local Y",
-        Description = "click para setar o fim do auto plant\n",
+        Title = "Set location Y",
+        Description = "Click to set the end of auto plant\n",
         Callback = function()
           y = Vector3.new(hrp.Position.X, 0.13552513718605042, hrp.Position.Z)
           print(y)
@@ -347,7 +347,7 @@ plant:AddButton({
 
 local Slider = plant:AddSlider("Slider", 
 {
-    Title = "Distancia de uma seed para outra\n",
+    Title = "Distance from one seed to another\n",
     Description = "step seed\n",
     Default = 0.001,
     Min = 0.001,
@@ -359,8 +359,8 @@ local Slider = plant:AddSlider("Slider",
 })
 
 plant:AddButton({
-    Title = "click para plantar",
-    Description = "esteja com a seed na mão",
+    Title = "Click to plant",
+    Description = "Hold the seed in your hand",
     Callback = function()
         local player = game.Players.LocalPlayer
         local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
@@ -379,16 +379,16 @@ plant:AddButton({
     end
 })
 
-plant:AddSection("plant spam (Pos player)")
+plant:AddSection("Plant spam (Player Pos)")
 
 local dlayp = 0.1
 
 plant:AddSlider("Slider", {
-    Title = "Delay do spam plant",
+    Title = "Spam plant delay",
     Default = dlayp,
     Min = 0.05,
     Max = 1,
-    Rounding = 2, -- arredonda até duas casas decimais (0.05, 0.10, etc)
+    Rounding = 2, -- rounds to two decimal places (0.05, 0.10, etc)
     Callback = function(v)
         dlayp = tonumber(string.format("%.2f", v))
     end
@@ -445,7 +445,7 @@ local logLines = {}
 local maxLines = 10
 local logBox = plant:AddParagraph({
     Title = "📋 AutoFarm Log",
-    Content = "เริ่มต้นพร้อมทำงาน..."
+    Content = "Ready to work..."
 })
 
 local function log(msg)
@@ -456,33 +456,33 @@ local function log(msg)
     logBox:SetContent(table.concat(logLines, "\n"))
 end
 
--- 🌱 เลือกเมล็ด
+-- 🌱 Select seed
 local seedList = {
     "Carrot", "Strawberry", "Tomato", "Watermelon", "Pineapple",
     "Blueberry", "Banana", "Coconut", "Pumpkin", "Cauliflower"
 }
 
 plant:AddDropdown("AutoFarmSeedList", {
-    Title = "🌱 เลือกเมล็ดที่ใช้ปลูก",
-    Description = "จะซื้ออัตโนมัติและถือใช้งาน",
+    Title = "🌱 Select seed to plant",
+    Description = "Will be automatically purchased and equipped",
     Values = seedList,
     Multi = false,
     Default = 1,
     Callback = function(value)
         seedName = value
-        log("ใช้เมล็ด: " .. seedName)
+        log("Using seed: " .. seedName)
     end
 })
 
 plant:AddSlider("SeedLimitSlider", {
-    Title = "📦 จำนวนปลูกต่อรอบ",
+    Title = "📦 Plant amount per cycle",
     Min = 1,
     Max = 50,
     Default = 5,
     Rounding = 0,
     Callback = function(val)
         seedLimit = val
-        log("ตั้งจำนวนปลูกต่อรอบ: " .. val)
+        log("Set plant amount per cycle: " .. val)
     end
 })
 
@@ -524,14 +524,14 @@ end
 
 local function sellInventory()
     ReplicatedStorage.GameEvents:WaitForChild("Sell_Inventory"):FireServer()
-    log("📦 Inventory เต็ม → ขายอัตโนมัติแล้ว")
+    log("📦 Inventory full → Auto-selling")
 end
 
 local function ensureSeedTool()
     local tool = lp.Character and lp.Character:FindFirstChildOfClass("Tool")
     if not tool or not tool.Name:lower():find(seedName:lower()) then
         buySeed:FireServer(seedName)
-        log("🛒 ซื้อเมล็ด: " .. seedName)
+        log("🛒 Buying seed: " .. seedName)
         task.wait(0.5)
     end
 end
@@ -544,7 +544,7 @@ local function plantSeedAt(pos)
     name = name:gsub("%s+$", "")
     ReplicatedStorage.GameEvents.Plant_RE:FireServer(pos, name)
     seedCountUsed += 1
-    log("🌱 ปลูกที่: (" .. math.floor(pos.X) .. ", " .. math.floor(pos.Z) .. ") → " .. name .. " #" .. seedCountUsed)
+    log("🌱 Planted at: (" .. math.floor(pos.X) .. ", " .. math.floor(pos.Z) .. ") → " .. name .. " #" .. seedCountUsed)
 end
 
 local function instantFarm()
@@ -584,21 +584,21 @@ local function instantFarm()
 end
 
 plant:AddToggle("AutoFarmToggle", {
-    Title = "🌾 เปิด/ปิด Auto Farm (Harvest + Plant + Sell)",
+    Title = "🌾 Toggle Auto Farm (Harvest + Plant + Sell)",
     Default = false,
     Callback = function(state)
         autoFarmEnabled = state
         if autoFarmEnabled then
-            log("✅ เริ่ม Auto Farm...")
+            log("✅ Starting Auto Farm...")
             instantFarm()
         elseif farmThread then
-            log("⛔ หยุด Auto Farm")
+            log("⛔ Stopping Auto Farm")
             task.cancel(farmThread)
         end
     end
 })
 
-plant:AddSection("Water spam (Pos Dropdown)")
+plant:AddSection("Water spam (Dropdown Pos)")
 
 local Player = game.Players.LocalPlayer
 local HRP = Player.Character and Player.Character:WaitForChild("HumanoidRootPart")
@@ -607,8 +607,8 @@ local wms = 0.1
 local pwms = Vector3.new(-204.42526245117188, 0.13552704453468323, -83.74856567382812)
 local running = false
 
-local dropdown = plant:AddDropdown("Locais", {
-    Title = "Destinos",
+local dropdown = plant:AddDropdown("Locations", {
+    Title = "Destinations",
     Values = {},
     Multi = false,
     Default = nil
@@ -627,13 +627,13 @@ local function UpdateDropdown()
 end
 
 plant:AddButton({
-    Title = "Adicionar Local",
+    Title = "Add Location",
     Callback = function()
         HRP = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
         if HRP then
             local p = Vector3.new(HRP.Position.X, 0.14, HRP.Position.Z)
             local id = #Locations + 1
-            local name = "Local " .. id
+            local name = "Location " .. id
             Locations[name] = p
             UpdateDropdown()
         end
@@ -641,7 +641,7 @@ plant:AddButton({
 })
 
 plant:AddButton({
-    Title = "Limpar Locais",
+    Title = "Clear Locations",
     Callback = function()
         Locations = {}
         UpdateDropdown()
@@ -657,8 +657,8 @@ dropdown:OnChanged(function(selected)
     end
 end)
 
-plant:AddSlider("Velocidade", {
-    Title = "Delay entre uso",
+plant:AddSlider("Speed", {
+    Title = "Delay between uses",
     Min = 0.1,
     Max = 1,
     Default = wms,
@@ -669,7 +669,7 @@ plant:AddSlider("Velocidade", {
 })
 
 plant:AddToggle("w", {
-    Title = "Ativar spam water (pos do dropdown)",
+    Title = "Activate water spam (dropdown pos)",
     Default = false,
     Callback = function(v)
         running = v
@@ -683,9 +683,9 @@ plant:AddToggle("w", {
         end
     end
 })
-plant:AddSection("Water spam (Pos player)")
+plant:AddSection("Water spam (Player Pos)")
 plant:AddSlider("DelayWater", {
-    Title = "Delay entre usos",
+    Title = "Delay between uses",
     Min = 0.1,
     Max = 1,
     Default = 0.1,
@@ -696,7 +696,7 @@ plant:AddSlider("DelayWater", {
 })
 
 plant:AddToggle("ToggleWaterSpam", {
-    Title = "Ativar spam water (pos do player)",
+    Title = "Activate water spam (player pos)",
     Default = false,
     Callback = function(state)
         getgenv().running_spam = state
@@ -722,16 +722,16 @@ plant:AddToggle("ToggleWaterSpam", {
 local tmpps = 30
 
 sell:AddButton({
-    Title = "Vender Colheitas",
-    Description = "Vende para o vendedor imediatamente.",
+    Title = "Sell Crops",
+    Description = "Sells to the vendor immediately.",
     Callback = function()
         tsf()
     end
 })
 
 sell:AddSlider("SellDelaySlider", {
-    Title = "Delay do Auto Sell (segundos)",
-    Description = "Define o intervalo entre cada venda automática.",
+    Title = "Auto Sell Delay (seconds)",
+    Description = "Sets the interval between each automatic sale.",
     Default = tmpps,
     Min = 20,
     Max = 60,
@@ -743,8 +743,8 @@ sell:AddSlider("SellDelaySlider", {
 
 getgenv().Atsell = false
 sell:AddToggle("", {
-    Title = "Vender Colheitas automaticamente",
-    Description = "Ativa a venda automática com base no delay definido.",
+    Title = "Sell Crops Automatically",
+    Description = "Enables automatic selling based on the defined delay.",
     Default = false,
     Callback = function(enabled)
         getgenv().Atsell = enabled 
@@ -761,7 +761,7 @@ sell:AddToggle("", {
 
 player:AddSlider("WalkSpeedSlider", {
     Title = "WalkSpeed",
-    Description = "Ajuste a velocidade de caminhada",
+    Description = "Adjust the walking speed",
     Min = 20,
     Max = 150,
     Default = 20,
@@ -782,7 +782,7 @@ function prefsh()
             table.insert(PetsId, child.Name)
         end
     end
-    print("Pets atualizados:")
+    print("Pets updated:")
     --[[for _, id in ipairs(PetsId) do
         print(id)
     end]]
@@ -790,8 +790,8 @@ function prefsh()
 end
 
 local pDropdown = pet:AddDropdown("Dropdown", {
-    Title = "Escolha o pet para feed\n",
-    Description = "auto se explica\n",
+    Title = "Choose the pet to feed\n",
+    Description = "Self-explanatory\n",
     Values = {},
     Multi = false,
     Default = nil,
@@ -806,8 +806,8 @@ local function updatePetDropdown()
 end
 
 pet:AddButton({
-    Title = "atualizar pet",
-    Description = "Atualiza pets",
+    Title = "Update pet",
+    Description = "Updates pets",
     Callback = function()
         updatePetDropdown()
     end
@@ -817,7 +817,7 @@ local pfeed
 
 pDropdown:OnChanged(function(Value)
     pfeed = Value
-    print("Pet selecionado:", pfeed)
+    print("Selected pet:", pfeed)
 end)
 
 updatePetDropdown()
@@ -826,8 +826,8 @@ updatePetDropdown()
 local autoFeed = false
 
 local tpfeed = pet:AddToggle("AutoFeedToggle", {
-    Title = "Alimentação Automática\n",
-    Description = "Alimenta o pet selecionado automaticamente\nPorem pegue a comida na mão!\n",
+    Title = "Automatic Feeding\n",
+    Description = "Feeds the selected pet automatically\nBut hold the food in your hand!\n",
     Default = false,
     Callback = function(Value)
         autoFeed = Value
@@ -836,9 +836,9 @@ local tpfeed = pet:AddToggle("AutoFeedToggle", {
                 while autoFeed do
                     if pfeed then
                         feedsc:FireServer("Feed", pfeed)
-                        print("Pet alimentado:", pfeed)
+                        print("Pet fed:", pfeed)
                     else
-                        print("Nenhum pet selecionado para alimentar")
+                        print("No pet selected to feed")
                     end
                     wait(0.3) 
                 end
@@ -848,30 +848,30 @@ local tpfeed = pet:AddToggle("AutoFeedToggle", {
 })
 
 pet:AddButton({
-    Title = "Alimentar pet selecionado",
-    Description = "Segure comida na mão!",
+    Title = "Feed selected pet",
+    Description = "Hold food in your hand!",
     Callback = function()
         if pfeed then
             feedsc:FireServer("Feed", pfeed)
-            print("Pet alimentado:", pfeed)
+            print("Pet fed:", pfeed)
         else
-            print("Nenhum pet selecionado")
+            print("No pet selected")
         end
     end
 })
 
 --
 
-ui:AddSection("Controle de UIs")
+ui:AddSection("UI Control")
 
 ui:AddButton({
     Title = "Cosmetic Shop UI",
-    Description = "Ativa/Desativa a Shop de cosmeticos",
+    Description = "Toggles the Cosmetic Shop UI",
     Callback = function()
         local ui = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("CosmeticShop_UI")
         if ui then
             ui.Enabled = not ui.Enabled
-            print("Cosmetic Shop UI:", ui.Enabled and "Ativada" or "Desativada")
+            print("Cosmetic Shop UI:", ui.Enabled and "Enabled" or "Disabled")
         end
     end
 })
@@ -879,12 +879,12 @@ ui:AddButton({
 
 ui:AddButton({
     Title = "Gear Shop UI",
-    Description = "Ativa/Desativa a Shop de equipamentos",
+    Description = "Toggles the Gear Shop UI",
     Callback = function()
         local ui = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("Gear_Shop")
         if ui then
             ui.Enabled = not ui.Enabled
-            print("Gear Shop UI:", ui.Enabled and "Ativada" or "Desativada")
+            print("Gear Shop UI:", ui.Enabled and "Enabled" or "Disabled")
         end
     end
 })
@@ -892,24 +892,24 @@ ui:AddButton({
 
 ui:AddButton({
     Title = "Seed Shop UI",
-    Description = "Ativa/Desativa a Shop de sementes",
+    Description = "Toggles the Seed Shop UI",
     Callback = function()
         local ui = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("Seed_Shop")
         if ui then
             ui.Enabled = not ui.Enabled
-            print("Seed Shop UI:", ui.Enabled and "Ativada" or "Desativada")
+            print("Seed Shop UI:", ui.Enabled and "Enabled" or "Disabled")
         end
     end
 })
 
 ui:AddButton({
     Title = "Daily quest UI",
-    Description = "Ativa/Desativa a Daily quest ui",
+    Description = "Toggles the Daily quest UI",
     Callback = function()
         local ui = game:GetService("Players").LocalPlayer.PlayerGui.DailyQuests_UI
         if ui then
             ui.Enabled = not ui.Enabled
-            print("Daily Quest UI:", ui.Enabled and "Ativada" or "Desativada")
+            print("Daily Quest UI:", ui.Enabled and "Enabled" or "Disabled")
         end
     end
 })
@@ -952,7 +952,7 @@ local stopv
 local tsas = 5
 
 event:AddSlider("Slider", {
-    Title = "Delay para enviar (segundos)",
+    Title = "Delay to send (seconds)",
     Default = tsas,
     Min = 1,
     Max = 20,
@@ -963,7 +963,7 @@ event:AddSlider("Slider", {
 })
 
 event:AddInput("Input", {
-    Title = "Parar ao atingir ",
+    Title = "Stop when reaching ",
     Default = nil,
     Placeholder = "Ex: 20000",
     Numeric = true,
@@ -974,36 +974,36 @@ event:AddInput("Input", {
 })
 
 event:AddToggle("UseStop", {
-    Title = "Ativar limite de pontos",
-    Description = "Envia até atingir o valor definido",
+    Title = "Activate point limit",
+    Description = "Sends until the defined value is reached",
     Default = false,
     Callback = function(v)
         usestopv = v
     end
 })
 
-_G.AutoUsarItens = false
-event:AddToggle("AutoUsarItens", {
-    Title = "Auto Enviar Plantas",
+_G.AutoUseItems = false
+event:AddToggle("AutoUseItems", {
+    Title = "Auto Send Plants",
     Default = false,
     Callback = function(v)
-        _G.AutoUsarItens = v
+        _G.AutoUseItems = v
         task.spawn(function()
-            while _G.AutoUsarItens do
-                local pontos = 0
+            while _G.AutoUseItems do
+                local points = 0
                 local success, result = pcall(function()
                     return workspace.SummerHarvestEvent.RewardSign:GetChildren()[2].SurfaceGui.PointTextLabel.ContentText
                 end)
 
                 if success and result then
                     local clean = string.gsub(result, "[^%d]", "")
-                    pontos = tonumber(clean) or 0
+                    points = tonumber(clean) or 0
                 end
 
-                if usestopv and pontos >= stopv then
+                if usestopv and points >= stopv then
                     game.StarterGui:SetCore("SendNotification", {
-                        Title = "Auto Submit Pausado",
-                        Text = "Altere o valor maximo para pausar para continuar!",
+                        Title = "Auto Submit Paused",
+                        Text = "Change the maximum value to pause to continue!",
                         Duration = 3
                     })			
                 else
@@ -1035,7 +1035,7 @@ local selshp = {}
 local bsshp = false
 
 event:AddDropdown("MultiDropdown", {
-    Title = "Selecione itens para comprar:\n",
+    Title = "Select items to buy:\n",
     Description = "Summer stock\n",
     Values = ss,
     Multi = true,
@@ -1045,7 +1045,7 @@ event:AddDropdown("MultiDropdown", {
 end)
 
 event:AddToggle("AutoBuySummerToggle", {
-    Title = "Ativar Auto Buy Summer\n",
+    Title = "Activate Auto Buy Summer\n",
     Default = false,
     Callback = function(v)
         bsshp = v
@@ -1088,15 +1088,15 @@ function svvererr(v)
     local numvers = tonumber(versgame)
     if numvers and newv and numvers > newv then
         Fluent:Notify({
-            Title = "Versão necessária errada!",
-            Content = "Versão Atual: " .. versgame,
-            SubContent = "Você tem que estar na versão: " .. newv .. " ou menos!",
+            Title = "Wrong required version!",
+            Content = "Current Version: " .. versgame,
+            SubContent = "You need to be on version: " .. newv .. " or less!",
             Duration = 5
         })
     end
 end
 vuln:AddParagraph({
-        Title = "Versao atual do serve: ", Content = versgame
+        Title = "Current server version: ", Content = versgame
     })
 
 
@@ -1104,8 +1104,8 @@ vuln:AddParagraph({
 
 
 utility:AddParagraph({
-	Title = "Se você viu isto, obrigado por ter chegado ate aqui",
-	Content = "Irei parar de programar. Ass: Lucas"
+	Title = "If you've seen this, thank you for making it this far",
+	Content = "I will stop programming. Sincerely: Lucas"
 	})
 
 
