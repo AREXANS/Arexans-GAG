@@ -39,12 +39,12 @@ end)
 
 local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/AREXANS/Arexans-GAG/refs/heads/main/main.lua"))()
 
--- Ukuran jendela diperkecil dari 600x350 menjadi 540x320
+-- Ukuran jendela diperkecil lagi menjadi 500x300
 local Window = Fluent:CreateWindow({
     Title = "AREXANS HUB |",
     SubTitle = "Made by Arexans | Version: ".. vful,
-    TabWidth = 160, -- Lebar tab juga disesuaikan
-    Size = UDim2.fromOffset(540, 320), -- Ukuran diubah di sini
+    TabWidth = 150, -- Lebar tab disesuaikan
+    Size = UDim2.fromOffset(500, 300), -- Ukuran diubah di sini
     Acrylic = false,
     Theme = "Dark",
     Center = true,
@@ -1107,17 +1107,19 @@ task.spawn(function()
 end)
 
 --
+-- Bagian Tombol Ikon Geser
+--
 
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
-local decalId = "rbxassetid://10734950309" -- Ikon Pengaturan
+local decalId = "rbxassetid://10734950309"
 
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "DraggableImageButtonGui"
-screenGui.ResetOnSpawn = false
-screenGui.Parent = playerGui
-screenGui.DisplayOrder = 10 -- Ditambahkan agar tombol selalu di atas
+local iconScreenGui = Instance.new("ScreenGui")
+iconScreenGui.Name = "DraggableImageButtonGui"
+iconScreenGui.ResetOnSpawn = false
+iconScreenGui.Parent = playerGui
+iconScreenGui.DisplayOrder = 10
 
 local imageButton = Instance.new("ImageButton")
 imageButton.Name = "DraggableButton"
@@ -1127,7 +1129,7 @@ imageButton.AnchorPoint = Vector2.new(1, 0)
 imageButton.Position = UDim2.new(1, -15, 0, 15)
 imageButton.BackgroundTransparency = 1
 imageButton.AutoButtonColor = false
-imageButton.Parent = screenGui
+imageButton.Parent = iconScreenGui
 
 local dragging, dragInput, mousePos, buttonPos = false
 
@@ -1159,5 +1161,14 @@ end)
 imageButton.MouseButton1Click:Connect(function()
 	Window:Minimize()
 end)
+
+-- Mengganti fungsi Destroy asli untuk menyertakan penghapusan ikon
+local originalDestroy = Fluent.Destroy
+function Fluent:Destroy()
+    originalDestroy(Fluent) -- Memanggil fungsi asli
+    if iconScreenGui then
+        iconScreenGui:Destroy() -- Menghancurkan GUI ikon
+    end
+end
 
 print(Fluent.Window)
