@@ -1,66 +1,105 @@
-```
--- Grow A Garden Executer Tool Script
-
--- Define the game's service references
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
--- Function to create a teleport button
-function createTeleportButton(buttonName, buttonPosition, teleportTo)
-    -- Instantiate the button
-    local button = Instance.new("Button")
-    button.Name = buttonName
-    button.Parent = Workspace
-    button.Position = buttonPosition
-    
-    -- Set button properties
-    button.Size = Vector3.new(2, 1, 0.2)
-    button.BackgroundColor = BrickColor.new("Really black")
-    button.BorderColor = BrickColor.new("Black")
-    button.Text = "Teleport to "..buttonName
-    
-    -- Event listener for button clicks
-    button.MouseButton1Down:Connect(function()
-        local player = Players.LocalPlayer
-        
-        -- Check if player is within the teleport range
-        if player then
-            player.Character:FindFirstChild("HumanoidRootPart").CFrame = teleportTo
-        else
-            print("You must be in-game to use the teleporter.")
-        end
-    end)
-end
+-- Variabel Lokal
+local lp = Players.LocalPlayer
 
--- Teleport buttons
-local eggShopPosition = Workspace:FindFirstChild("Egg_Shop_Spawn").Position
-local gearShopPosition = Workspace:FindFirstChild("Gear_Shop_Spawn").Position
-local zenEventPosition = Workspace:FindFirstChild("Zen_Event_Spawn").Position
+-- ==================================================
+-- FUNGSI UTAMA
+-- ==================================================
 
--- Create teleport buttons
-createTeleportButton("Egg Shop", Vector3.new(0, 0, 0), eggShopPosition)
-createTeleportButton("Gear Shop", Vector3.new(5, 0, 0), gearShopPosition)
-createTeleportButton("Zen Event", Vector3.new(10, 0, 0), zenEventPosition)
-
--- Function to teleport to other player's gardens
-function teleportToGarden(targetGarden)
-    local player = Players.LocalPlayer
-    if player then
-        player.Character:FindFirstChild("HumanoidRootPart").CFrame = targetGarden.CFrame
-    else
-        print("You must be in-game to teleport to another garden.")
+-- Fungsi untuk melakukan teleportasi dengan mulus (smooth)
+local function teleportTo(targetCFrame)
+    -- Pastikan karakter pemain ada dan memiliki HumanoidRootPart
+    local char = lp.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then
+        print("Karakter tidak ditemukan, teleportasi dibatalkan.")
+        return
     end
+    
+    local rootPart = char.HumanoidRootPart
+    
+    -- Membuat animasi pergerakan (tween) untuk teleportasi yang halus
+    local tweenInfo = TweenInfo.new(
+        0.3, -- Durasi teleportasi dalam detik
+        Enum.EasingStyle.Linear,
+        Enum.EasingDirection.Out
+    )
+    
+    -- Menambahkan sedikit ketinggian (Y+5) agar tidak terjebak di dalam tanah
+    local finalCFrame = targetCFrame * CFrame.new(0, 5, 0)
+    
+    local tween = TweenService:Create(rootPart, tweenInfo, {CFrame = finalCFrame})
+    tween:Play()
 end
 
--- Example usage: teleportToGarden(Workspace:FindFirstChild("OtherPlayersGarden"))
-```
+-- ==================================================
+-- LOKASI TELEPORTASI
+-- ==================================================
+-- Di sini kita mendefinisikan CFrame (koordinat dan rotasi) untuk setiap lokasi.
+-- Menggunakan WaitForChild untuk memastikan objek sudah ada sebelum skrip berjalan.
 
-Please note that this script assumes the following:
+-- Lokasi Toko Gear (Anda mungkin perlu menyesuaikan nama 'Gear' jika berbeda)
+local gearLocation = Workspace.NPCS:WaitForChild("Gear").PrimaryPart.CFrame
 
-- You have the necessary permissions to execute scripts in the game.
-- The game has a `Workspace` with the required spawn points named `"Egg_Shop_Spawn"`, `"Gear_Shop_Spawn"`, and `"Zen_Event_Spawn"` with positions where you want the player to be teleported to.
-- The game is structured in such a way that you can easily get references to the player's character and other game elements.
-- The game does not have any security measures in place to prevent unauthorized teleportation or script execution.
+-- Lokasi Toko Pet (Anda mungkin perlu menyesuaikan nama 'Pet Stand' jika berbeda)
+local petLocation = Workspace.NPCS:WaitForChild("Pet Stand").PrimaryPart.CFrame
 
-Make sure to replace `"OtherPlayersGarden"` with the actual name of the garden you want to teleport to in the `teleportToGarden` function call. Also, ensure that the positions and naming conventions match the actual game objects in "Grow A Garden" for the script to work as intended.
+-- Lokasi Event Zen. Saya set di tengah peta (0, 100, 0).
+-- Anda bisa mengubah koordinat X, Y, Z di bawah ini jika lokasinya berbeda.
+local zenLocation = CFrame.new(0, 100, 0)
+
+
+-- ==================================================
+-- TAMPILAN ANTARMUKA (UI) MENGGUNAKAN RAYFIELD
+-- ==================================================
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Grow a Garden | Teleport Menu",
+   LoadingTitle = "Teleport Menu",
+   LoadingSubtitle = "by RzkyO (Disederhanakan)",
+   Theme = "default"
+})
+
+-- Membuat Tab utama untuk tombol teleport
+local TeleportTab = Window:CreateTab("Teleport", "map-pin") -- Ikon pin peta
+
+TeleportTab:CreateSection("Lokasi Cepat")
+
+-- Tombol untuk teleport ke Toko Gear
+TeleportTab:CreateButton({
+   Name = "Teleport ke Gear",
+   Callback = function()
+      print("Teleportasi ke Gear...")
+      teleportTo(gearLocation)
+   end
+})
+
+-- Tombol untuk teleport ke Toko Pet
+TeleportTab:CreateButton({
+   Name = "Teleport ke Pets",
+   Callback = function()
+      print("Teleportasi ke Pets...")
+      teleportTo(petLocation)
+   end
+})
+
+-- Tombol untuk teleport ke Event Zen
+TeleportTab:CreateButton({
+   Name = "Teleport ke Events Zen",
+   Callback = function()
+      print("Teleportasi ke Events Zen...")
+      teleportTo(zenLocation)
+   end
+})
+
+-- Tombol untuk menghancurkan UI jika diperlukan
+TeleportTab:CreateButton({
+    Name = "Tutup UI",
+    Callback = function()
+        Rayfield:Destroy()
+    end
+})
